@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Notes.app</title>
+    <link rel="stylesheet" href="css/notes.css" />
+  </head>
+  <body>
+    <nav>
+      <ul class="noteapp_menu">
+        <li id="add">+</li>
+        <li id="edit">edit</li>
+        <li id="del">del</li>
+      </ul>
+    </nav>
+
+    <div class="noteapp_content">
+
+      <section class="note_list" id="noteListView">
+
+        <div class="note_list_item">titre note 1 </div>
+        <div class="note_list_item note_list_item-selected">titre note 2 </div>
+
+
+      </section>
+
+      <section class="main_note">
+        <div class="create_edit_note create_edit_note-hidden" id="noteForm">
+          <input
+            id="form_add_note_title"
+            type="text"
+            placeholder="titre"
+            required
+          />
+          <textarea id="form_add_note_text">contenu de la note</textarea>
+          <button id="form_add_note_valid">valider</button>
+        </div>
+
+        <div class="current_note" id="currentNoteView"></div>
+      </section>
+    </div>
+    <script src="js/showdown.js"></script>
+    <script src="js/notes.js"></script>
+  </body>
+</html>
