@@ -70,12 +70,14 @@ window.addEventListener('load', () => {
     }
 
     class NoteList{
-        constructor(list){
+        constructor(list, index = 0){
             this.list = list
+            this.index = localStorage.getItem('index');
         }
 
         addNote(note){
             this.list.push(note);
+            localStorage.setItem('index', this.index++);
         }
 
         get(n){ return this.list[n]; }
@@ -83,14 +85,21 @@ window.addEventListener('load', () => {
         getList(){ return this.list; }
 
         save(){
-            localStorage.setItem('list', JSON.stringify(this.list));
+            this.index++;
+            localStorage.setItem('index', this.index);
+            localStorage.setItem(this.index, JSON.stringify(this.list));
         }
 
         load(){
-            let notes = JSON.parse(localStorage.getItem('list'));
-            notes.forEach(element => {
-                new NoteListView().displayItem(element);
-            });
+            this.index=localStorage.getItem('index');
+            for (let i = 0; i < this.index+1; i++) {
+                let notes = JSON.parse(localStorage.getItem(i));
+                if (notes) {
+                    notes.forEach(element => {
+                        new NoteListView().displayItem(element);
+                    });
+                }
+            }
         }
     }
 
@@ -124,11 +133,12 @@ window.addEventListener('load', () => {
 
     const noteForm = new NoteFormView();
     const App = new MainApp(noteForm);
-    
     App.init();
 
     const listNotes = new NoteList([]);
     listNotes.load();
+
+    console.log(listNotes);
 
     document.querySelector('#form_add_note_valid').addEventListener('click', (handler) => {
         noteForm.validate();
