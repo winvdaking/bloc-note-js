@@ -85,7 +85,6 @@ window.addEventListener('load', () => {
         getList(){ return this.list; }
 
         save(){
-            this.index++;
             localStorage.setItem('index', this.index);
             localStorage.setItem(this.index, JSON.stringify(this.list));
         }
@@ -129,8 +128,20 @@ window.addEventListener('load', () => {
             let menu = new MainMenuView();
             menu.init();
         }
+
+        delete(index){
+            console.log(index);
+            localStorage.removeItem(index);
+            localStorage.splice();
+            localStorage.setItem('index', localStorage.getItem('index')-1);
+            document.getElementById('currentNoteView').classList.add('create_edit_note-hidden');
+        }
     }
 
+
+    /**
+     * Initialisation de l'application
+     */
     const noteForm = new NoteFormView();
     const App = new MainApp(noteForm);
     App.init();
@@ -138,10 +149,34 @@ window.addEventListener('load', () => {
     const listNotes = new NoteList([]);
     listNotes.load();
 
-    console.log(listNotes);
-
     document.querySelector('#form_add_note_valid').addEventListener('click', (handler) => {
         noteForm.validate();
     });
+
+    /**
+     * Lorsqu'on clique sur une note dans la liste, elle s'affichera
+     */
+    let lesNotesChargees = document.getElementsByClassName('note_list_item');
+    for (let i = 0; i < lesNotesChargees.length; i++) {
+        const element = lesNotesChargees[i];
+        element.addEventListener('click', (handler) => {
+            // Retire la class css note_list_item_selected des autres éléments
+            document.querySelectorAll('.note_list_item').forEach(element => {
+                if (element.classList.contains('note_list_item-selected')) {
+                    element.classList.remove('note_list_item-selected');
+                }
+            });
+            // Ajoute la class selected sur l'élément courant
+            element.classList.add('note_list_item-selected');
+            // On affiche la note
+            new NoteView(JSON.parse(localStorage.getItem(i+1))[0]).afficher();
+
+            document.getElementById('del').addEventListener('click', (handler) => {
+                App.delete(i);
+            });
+        });
+    }
+
+
 
 });
