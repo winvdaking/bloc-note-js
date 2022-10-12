@@ -130,11 +130,20 @@ window.addEventListener('load', () => {
         }
 
         delete(index){
-            console.log(index);
-            localStorage.removeItem(index);
-            localStorage.splice();
+            localStorage.removeItem(index+1);
+            //slice dans localStorage manuel
+            for (let i = localStorage.length+1; i > index; i--) {
+                const element = localStorage.getItem(i);
+                console.log(element);
+                //localStorage.setItem(i-1, element)
+            }
             localStorage.setItem('index', localStorage.getItem('index')-1);
             document.getElementById('currentNoteView').classList.add('create_edit_note-hidden');
+        }
+
+        edit(index){
+            console.log("afficher");
+            new NoteFormView().display();
         }
     }
 
@@ -174,9 +183,11 @@ window.addEventListener('load', () => {
             document.getElementById('del').addEventListener('click', (handler) => {
                 App.delete(i);
             });
+
+            document.getElementById('edit').addEventListener('click', (handler) => {
+                App.edit(i);
+            })
         });
     }
-
-
 
 });
